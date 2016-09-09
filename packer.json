@@ -63,7 +63,7 @@
             "http_directory": "http",
             "iso_checksum": "ca2531b8cd79ea5b778ede3a524779b9",
             "iso_checksum_type": "md5",
-            "iso_url": "http://old-releases.ubuntu.com/releases/14.04.1/ubuntu-14.04.1-server-amd64.iso",
+            "iso_url": "http://ubuntu-cd.mirror.iweb.ca/14.04/ubuntu-14.04.5-server-amd64.iso",
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_port": 22,
