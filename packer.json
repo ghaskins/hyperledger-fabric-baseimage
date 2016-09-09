@@ -74,8 +74,7 @@
             "hard_drive_interface": "sata",
             "vboxmanage": [
                 ["modifyvm", "{{.Name}}", "--vrde", "off"],
-                ["modifyvm", "{{.Name}}", "--pae", "off"],
-                ["modifyvm", "{{.Name}}", "--paravirtprovider", "legacy"]
+                ["modifyvm", "{{.Name}}", "--pae", "off"]
             ]
         }
     ],
