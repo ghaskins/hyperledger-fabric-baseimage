@@ -5,7 +5,7 @@
     },
     "variables": {
         "artifact": "{{env `ATLAS_ARTIFACT`}}",
-        "release": "{{env `BASEIMAGE_RELEASE`}}",
+        "release": "{{env `BASEIMAGE_RELEASE`}}"
     },
     "provisioners": [
         {
