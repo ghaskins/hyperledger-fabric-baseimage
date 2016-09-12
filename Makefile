@@ -1,4 +1,4 @@
-NAME=hyperledger/fabric-baseimage
+NAME ?= hyperledger/fabric-baseimage
 VERSION=$(shell cat ./release)
 ARCH=$(shell uname -m)
 DOCKER_TAG ?= $(ARCH)-$(VERSION)
@@ -14,16 +14,12 @@ ifeq ($(DOCKER_BASE), )
 $(error "Architecture \"$(ARCH)\" is unsupported")
 endif
 
-
-# strips off the post-processors that try to upload artifacts to the cloud
-packer-local.json: packer.json
-	jq 'del(."post-processors"[0][1]) | del(."post-processors"[1][1])' packer.json > $@
-
 all: vagrant docker
 
-$(VAGRANTIMAGE): packer-local.json
+$(VAGRANTIMAGE): packer.json
+	ATLAS_ARTIFACT=$(NAME) \
 	BASEIMAGE_RELEASE=$(VERSION) \
-	packer build -only virtualbox-iso packer-local.json
+	packer build -only virtualbox-iso packer.json
 
 Dockerfile: Dockerfile.in Makefile
 	@echo "# Generated from Dockerfile.in.  DO NOT EDIT!" > $@
@@ -37,14 +33,10 @@ docker: Dockerfile release
 vagrant: $(VAGRANTIMAGE) remove release
 	vagrant box add -name $(NAME) $(VAGRANTIMAGE)
 
-push:
-	@echo "You will need your ATLAS_TOKEN set for this to succeed"
-	packer push -name $(NAME) packer.json
-
 remove:
 	-vagrant box remove --box-version 0 $(NAME)
 
 clean: remove
 	-rm $(VAGRANTIMAGE)
 	-rm Dockerfile
-	-rm packer-local.json
+        

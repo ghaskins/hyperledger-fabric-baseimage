@@ -4,11 +4,8 @@
         "vcs": true
     },
     "variables": {
-        "artifact": "baseimage",
+        "artifact": "{{env `ATLAS_ARTIFACT`}}",
         "release": "{{env `BASEIMAGE_RELEASE`}}",
-        "dockerhub_email": "{{env `DOCKERHUB_EMAIL`}}",
-        "dockerhub_username": "{{env `DOCKERHUB_USERNAME`}}",
-        "dockerhub_password": "{{env `DOCKERHUB_PASSWORD`}}"
     },
     "provisioners": [
         {
@@ -92,7 +89,7 @@
                 "only": [
                     "virtualbox-iso"
                 ],
-                "artifact": "hyperledger/{{user `artifact`}}",
+                "artifact": "{{user `artifact`}}",
                 "artifact_type": "vagrant.box",
                 "metadata": {
                     "provider": "virtualbox",
