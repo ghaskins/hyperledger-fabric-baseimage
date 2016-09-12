@@ -1,4 +1,4 @@
-NAME ?= hyperledger/fabric-baseimage
+NAME ?= hyperledger/fabric-baseimage-sandbox
 VERSION=$(shell cat ./release)
 ARCH=$(shell uname -m)
 DOCKER_TAG ?= $(ARCH)-$(VERSION)
@@ -39,4 +39,3 @@ remove:
 clean: remove
 	-rm $(VAGRANTIMAGE)
 	-rm Dockerfile
-        
