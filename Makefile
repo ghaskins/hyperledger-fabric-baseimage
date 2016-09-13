@@ -1,5 +1,5 @@
 NAME ?= hyperledger/fabric-baseimage-sandbox
-VERSION ?= 0.0.12-SNAPSHOT-$(shell git rev-parse --short HEAD)
+VERSION ?= 0.0.12
 
 ARCH=$(shell uname -m)
 DOCKER_TAG ?= $(ARCH)-$(VERSION)
