@@ -57,3 +57,4 @@ clean: remove
 	-rm *.box
 	-rm Dockerfile
 	-rm packer-local.json
+	-rm -rf packer_cache
