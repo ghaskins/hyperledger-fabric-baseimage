@@ -2,6 +2,7 @@ NAME ?= hyperledger/fabric-baseimage-sandbox
 VERSION=$(shell cat ./release)
 ARCH=$(shell uname -m)
 DOCKER_TAG ?= $(ARCH)-$(VERSION)
+VAGRANTIMAGE=baseimage-v$(VERSION).box
 
 DOCKER_BASE_x86_64=ubuntu:trusty
 DOCKER_BASE_s390x=s390x/ubuntu:xenial
@@ -26,7 +27,7 @@ packer-local.json: packer.json
 	packer build $<
 
 baseimage-public.box: packer.json
-baseimage-local.box: packer-local.json
+$(VAGRANTIMAGE): packer-local.json
 
 Dockerfile: Dockerfile.in Makefile
 	@echo "# Generated from Dockerfile.in.  DO NOT EDIT!" > $@
@@ -44,7 +45,7 @@ docker: Dockerfile release
 
 vagrant: baseimage-public.box release
 
-vagrant-local: baseimage-local.box remove release
+vagrant-local: $(VAGRANTIMAGE) remove release
 	vagrant box add -name $(NAME) $<
 
 remove:
