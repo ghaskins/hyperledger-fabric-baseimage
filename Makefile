@@ -1,5 +1,6 @@
 NAME ?= hyperledger/fabric-baseimage-sandbox
-VERSION=$(shell cat ./release)
+VERSION ?= 0.0.12-SNAPSHOT
+
 ARCH=$(shell uname -m)
 DOCKER_TAG ?= $(ARCH)-$(VERSION)
 VAGRANTIMAGE=baseimage-v$(VERSION).box
@@ -34,7 +35,7 @@ Dockerfile: Dockerfile.in Makefile
 	@cat Dockerfile.in | \
 	sed -e  "s|_DOCKER_BASE_|$(DOCKER_BASE)|" >> $@
 
-docker-local: Dockerfile release
+docker-local: Dockerfile
 	@echo "Generating docker"
 	@docker build -t $(NAME):$(DOCKER_TAG) .
 
@@ -45,9 +46,9 @@ docker: docker-local
 		--password=$(DOCKER_HUB_PASSWORD)
 	@docker push $(NAME):$(DOCKER_TAG)
 
-vagrant: baseimage-public.box release
+vagrant: baseimage-public.box Makefile
 
-vagrant-local: $(VAGRANTIMAGE) remove release
+vagrant-local: $(VAGRANTIMAGE) remove Makefile
 	vagrant box add -name $(NAME) $<
 
 remove:
