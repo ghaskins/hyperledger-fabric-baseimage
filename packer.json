@@ -18,6 +18,7 @@
                         "scripts/vagrant/virtualbox.sh",
                         "scripts/vagrant/vagrant.sh",
                         "scripts/common/setup.sh",
+                        "scripts/common/host.sh",
                         "scripts/vagrant/cleanup.sh",
                         "scripts/vagrant/zerodisk.sh"
                     ],
