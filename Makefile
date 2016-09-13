@@ -34,9 +34,11 @@ Dockerfile: Dockerfile.in Makefile
 	@cat Dockerfile.in | \
 	sed -e  "s|_DOCKER_BASE_|$(DOCKER_BASE)|" >> $@
 
-docker: Dockerfile release
+docker-local: Dockerfile release
 	@echo "Generating docker"
 	@docker build -t $(NAME):$(DOCKER_TAG) .
+
+docker: docker-local
 	@docker login \
 		--email=$(DOCKER_HUB_EMAIL) \
 		--username=$(DOCKER_HUB_USERNAME) \
