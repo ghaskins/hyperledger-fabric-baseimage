@@ -2,7 +2,6 @@ NAME ?= hyperledger/fabric-baseimage-sandbox
 VERSION=$(shell cat ./release)
 ARCH=$(shell uname -m)
 DOCKER_TAG ?= $(ARCH)-$(VERSION)
-VAGRANTIMAGE=packer_virtualbox-iso_virtualbox.box
 
 DOCKER_BASE_x86_64=ubuntu:trusty
 DOCKER_BASE_s390x=s390x/ubuntu:xenial
@@ -16,10 +15,18 @@ endif
 
 all: vagrant docker
 
-$(VAGRANTIMAGE): packer.json
+# strips off the post-processors that try to upload artifacts to the cloud
+packer-local.json: packer.json
+	jq 'del(."post-processors"[0][1])' packer.json > $@
+
+%.box:
 	ATLAS_ARTIFACT=$(NAME) \
 	BASEIMAGE_RELEASE=$(VERSION) \
-	packer build -only virtualbox-iso packer.json
+	OUTPUT_FILE=$@ \
+	packer build $<
+
+baseimage-public.box: packer.json
+baseimage-local.box: packer-local.json
 
 Dockerfile: Dockerfile.in Makefile
 	@echo "# Generated from Dockerfile.in.  DO NOT EDIT!" > $@
@@ -35,12 +42,15 @@ docker: Dockerfile release
 		--password=$(DOCKER_HUB_PASSWORD)
 	@docker push $(NAME):$(DOCKER_TAG)
 
-vagrant: $(VAGRANTIMAGE) remove release
-	vagrant box add -name $(NAME) $(VAGRANTIMAGE)
+vagrant: baseimage-public.box release
+
+vagrant-local: baseimage-local.box remove release
+	vagrant box add -name $(NAME) $<
 
 remove:
 	-vagrant box remove --box-version 0 $(NAME)
 
 clean: remove
-	-rm $(VAGRANTIMAGE)
+	-rm *.box
 	-rm Dockerfile
+	-rm packer-local.json
