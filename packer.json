@@ -86,7 +86,8 @@
                 "metadata": {
                     "provider": "virtualbox",
                     "version": "{{user `release`}}"
-                }
+                },
+                "keep_input_artifact": false
             }
         ]
     ]
