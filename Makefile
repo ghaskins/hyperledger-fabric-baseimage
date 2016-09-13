@@ -29,6 +29,8 @@ Dockerfile: Dockerfile.in Makefile
 docker: Dockerfile release
 	@echo "Generating docker"
 	@docker build -t $(NAME):$(DOCKER_TAG) .
+	@docker login --email=$DOCKER_HUB_EMAIL --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
+	@docker push $(NAME):$(DOCKER_TAG)
 
 vagrant: $(VAGRANTIMAGE) remove release
 	vagrant box add -name $(NAME) $(VAGRANTIMAGE)
