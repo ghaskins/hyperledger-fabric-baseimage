@@ -1,6 +1,6 @@
 NAME ?= hyperledger/fabric-baseimage-sandbox
 VERSION ?= 0.0.12
-IS_RELEASE = false
+IS_RELEASE = true
 
 ARCH=$(shell uname -m)
 DOCKER_TAG ?= $(ARCH)-$(VERSION)
